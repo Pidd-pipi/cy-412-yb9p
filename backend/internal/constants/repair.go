@@ -9,3 +9,10 @@ const (
 )
 
 var ValidRepairStatuses = map[string]bool{RepairStatusPending: true, RepairStatusAssigned: true, RepairStatusProcessing: true, RepairStatusDone: true, RepairStatusClosed: true}
+
+const (
+	TimeSlotAM = "am"
+	TimeSlotPM = "pm"
+)
+
+var ValidTimeSlots = map[string]bool{TimeSlotAM: true, TimeSlotPM: true}

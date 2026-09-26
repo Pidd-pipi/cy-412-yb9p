@@ -62,7 +62,7 @@ func seed(db *gorm.DB) error {
 	if e = db.Create(&users).Error; e != nil {
 		return e
 	}
-	if e = db.Create(&model.Repair{UserID: users[0].ID, Title: "客厅灯具闪烁", Description: "晚间开灯时出现闪烁，请安排师傅检查。", Type: "水电", Status: constants.RepairStatusPending}).Error; e != nil {
+	if e = db.Create(&model.Repair{UserID: users[0].ID, Title: "客厅灯具闪烁", Description: "晚间开灯时出现闪烁，请安排师傅检查。", Type: "水电", Status: constants.RepairStatusPending, VisitDate: time.Now().AddDate(0, 0, 1).Format("2006-01-02"), TimeSlot: constants.TimeSlotAM}).Error; e != nil {
 		return e
 	}
 	if e = db.Create(&model.Payment{UserID: users[0].ID, FeeType: "物业费", Amount: 268.50, Month: "2026-08", Status: "unpaid"}).Error; e != nil {

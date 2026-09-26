@@ -11,6 +11,8 @@ type Repair struct {
 	Type        string    `json:"type"`
 	Images      string    `json:"images"`
 	Status      string    `gorm:"index;size:20" json:"status"`
+	VisitDate   string    `gorm:"index;size:10" json:"visit_date"`
+	TimeSlot    string    `gorm:"size:2" json:"time_slot"`
 	HandlerID   *uint     `json:"handler_id"`
 	Handler     *User     `gorm:"foreignKey:HandlerID" json:"handler,omitempty"`
 	Rating      int       `json:"rating"`

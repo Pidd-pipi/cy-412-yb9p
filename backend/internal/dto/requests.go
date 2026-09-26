@@ -16,6 +16,12 @@ type CreateRepairRequest struct {
 	Description string `json:"description" validate:"required,min=5"`
 	Type        string `json:"type" validate:"required,oneof=水电 家具 公共设施 其他"`
 	Images      string `json:"images"`
+	VisitDate   string `json:"visit_date" validate:"required,datetime=2006-01-02"`
+	TimeSlot    string `json:"time_slot" validate:"required,oneof=am pm"`
+}
+type RescheduleRepairRequest struct {
+	VisitDate string `json:"visit_date" validate:"required,datetime=2006-01-02"`
+	TimeSlot  string `json:"time_slot" validate:"required,oneof=am pm"`
 }
 type AssignRepairRequest struct {
 	HandlerID uint `json:"handler_id" validate:"required"`

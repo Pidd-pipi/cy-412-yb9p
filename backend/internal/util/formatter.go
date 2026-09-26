@@ -16,3 +16,7 @@ func RoleText(v string) string {
 	m := map[string]string{constants.UserRoleResident: "业主", constants.UserRoleStaff: "物业人员", constants.UserRoleAdmin: "管理员"}
 	return m[v]
 }
+func SlotText(v string) string {
+	m := map[string]string{constants.TimeSlotAM: "上午", constants.TimeSlotPM: "下午"}
+	return m[v]
+}

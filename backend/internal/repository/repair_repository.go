@@ -31,3 +31,8 @@ func (r *RepairRepository) CountOpen() (int64, error) {
 	e := r.DB.Model(&model.Repair{}).Where("status NOT IN ?", []string{"done", "closed"}).Count(&n).Error
 	return n, e
 }
+func (r *RepairRepository) CountOpenByHandlerSlot(handlerID uint, date, slot string, excludeID uint) (int64, error) {
+	var n int64
+	e := r.DB.Model(&model.Repair{}).Where("handler_id = ? AND visit_date = ? AND time_slot = ? AND status NOT IN ? AND id <> ?", handlerID, date, slot, []string{"done", "closed"}, excludeID).Count(&n).Error
+	return n, e
+}

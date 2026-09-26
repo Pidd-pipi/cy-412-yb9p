@@ -28,7 +28,7 @@ func (h *RepairHandler) Create(c *gin.Context) {
 	if !Bind(c, &r, h.Validate) {
 		return
 	}
-	v, e := h.svc.Create(c.GetUint("userID"), r.Title, r.Description, r.Type, r.Images)
+	v, e := h.svc.Create(c.GetUint("userID"), r.Title, r.Description, r.Type, r.Images, r.VisitDate, r.TimeSlot, c.GetString("role"))
 	if e != nil {
 		Fail(c, 500, 50001, e.Error())
 		return
@@ -42,6 +42,19 @@ func (h *RepairHandler) Assign(c *gin.Context) {
 	}
 	id, _ := strconv.Atoi(c.Param("id"))
 	v, e := h.svc.Assign(uint(id), r.HandlerID, c.GetString("role"))
+	if e != nil {
+		Fail(c, 400, 40001, e.Error())
+		return
+	}
+	OK(c, v)
+}
+func (h *RepairHandler) Reschedule(c *gin.Context) {
+	var r dto.RescheduleRepairRequest
+	if !Bind(c, &r, h.Validate) {
+		return
+	}
+	id, _ := strconv.Atoi(c.Param("id"))
+	v, e := h.svc.Reschedule(uint(id), c.GetUint("userID"), r.VisitDate, r.TimeSlot, c.GetString("role"))
 	if e != nil {
 		Fail(c, 400, 40001, e.Error())
 		return
