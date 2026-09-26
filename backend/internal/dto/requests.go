@@ -12,13 +12,19 @@ type UpdateProfileRequest struct {
 	Room     string `json:"room"`
 }
 type CreateRepairRequest struct {
-	Title       string `json:"title" validate:"required,min=2,max=100"`
-	Description string `json:"description" validate:"required,min=5"`
-	Type        string `json:"type" validate:"required,oneof=水电 家具 公共设施 其他"`
-	Images      string `json:"images"`
+	Title           string `json:"title" validate:"required,min=2,max=100"`
+	Description     string `json:"description" validate:"required,min=5"`
+	Type            string `json:"type" validate:"required,oneof=水电 家具 公共设施 其他"`
+	Images          string `json:"images"`
+	AppointmentDate string `json:"appointment_date" validate:"required,datetime=2006-01-02"`
+	AppointmentSlot string `json:"appointment_slot" validate:"required,oneof=morning afternoon"`
 }
 type AssignRepairRequest struct {
 	HandlerID uint `json:"handler_id" validate:"required"`
+}
+type RescheduleRepairRequest struct {
+	AppointmentDate string `json:"appointment_date" validate:"required,datetime=2006-01-02"`
+	AppointmentSlot string `json:"appointment_slot" validate:"required,oneof=morning afternoon"`
 }
 type UpdateRepairStatusRequest struct {
 	Status string `json:"status" validate:"required,oneof=pending assigned processing done closed"`

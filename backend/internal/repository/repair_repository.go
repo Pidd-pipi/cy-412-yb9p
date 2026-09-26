@@ -31,3 +31,18 @@ func (r *RepairRepository) CountOpen() (int64, error) {
 	e := r.DB.Model(&model.Repair{}).Where("status NOT IN ?", []string{"done", "closed"}).Count(&n).Error
 	return n, e
 }
+
+// CountHandlerSlotConflict 统计该师傅同一天同一时段仍未结束的其他工单数；excludeID 用于排除当前工单自身。
+func (r *RepairRepository) CountHandlerSlotConflict(handlerID uint, date, slot string, excludeID uint) (int64, error) {
+	var n int64
+	q := r.DB.Model(&model.Repair{}).
+		Where("handler_id = ?", handlerID).
+		Where("appointment_date = ?", date).
+		Where("appointment_slot = ?", slot).
+		Where("status NOT IN ?", []string{"done", "closed"})
+	if excludeID > 0 {
+		q = q.Where("id <> ?", excludeID)
+	}
+	e := q.Count(&n).Error
+	return n, e
+}

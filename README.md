@@ -19,7 +19,7 @@ docker compose up -d
 ## 主要功能
 
 - **物业工作台**：汇总待办报修、本月已收费用和近期公告。
-- **报修管理**：业主创建水电/家具/公共设施等报修；物业筛选、分配和更新进度。
+- **报修管理**：业主创建水电/家具/公共设施等报修时选定未来七天内的上门日期与上午/下午时段；物业筛选、分配和更新进度，同一师傅同一天同一时段只能有一张未结束工单。
 - **费用缴纳**：按业主展示账单，通过支付宝沙箱模拟完成支付和记录查询。
 - **社区公告**：置顶、发布、详情查看与阅读计数。
 - **个人中心**：更新昵称、头像 URL，并绑定楼栋、单元和房间。
@@ -68,9 +68,10 @@ cd backend && go build ./...
 | POST | `/auth/login` | 登录（限流） |
 | GET/PUT | `/users/me` | 获取或更新个人资料 |
 | GET | `/users/staff` | 获取处理人员，`repair:manage` |
-| GET/POST | `/repairs` | 工单列表 / 创建工单 |
-| PATCH | `/repairs/:id/assign` | 分配处理人，`repair:manage` |
-| PATCH | `/repairs/:id/status` | 更新进度，`repair:manage` |
+| GET/POST | `/repairs` | 工单列表 / 创建工单（提交时必传未来七天内 `appointment_date` 与 `appointment_slot`） |
+| PATCH | `/repairs/:id/assign` | 分配处理人，`repair:manage`；同师傅同日同时段有未结束工单返回 409 |
+| PATCH | `/repairs/:id/appointment` | 报修人在工单完成/关闭前改预约；冲突返回 409，终态返回 400 |
+| PATCH | `/repairs/:id/status` | 更新进度（完成/关闭即释放师傅时段），`repair:manage` |
 | GET/POST | `/payments` | 账单列表 / 生成账单 |
 | POST | `/payments/:id/pay` | 模拟支付（限流） |
 | GET/POST | `/announcements` | 公告列表 / 发布，发布需 `announcement:publish` |
